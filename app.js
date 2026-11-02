@@ -4,6 +4,7 @@
 
 // Space Devs development endpoint: no rate limits, but the data is stale and limited.
 const BASE_URL = "https://lldev.thespacedevs.com/2.3.0";
+const message = document.getElementById("status");
 
 // ---------------------------------------------------------------
 // PART 1: XMLHttpRequest and callbacks
@@ -16,7 +17,7 @@ const BASE_URL = "https://lldev.thespacedevs.com/2.3.0";
 function getUpcomingLaunches(callback) {
   // TODO: Implement XHR GET request
   const xhr = new XMLHttpRequest();
-  xhr.open(BASE_URL + "/launches/upcoming/");
+  xhr.open("GET", BASE_URL + "/launches/upcoming/");
   xhr.send();
 
   xhr.onreadystatechange = () => {
@@ -29,11 +30,10 @@ function getUpcomingLaunches(callback) {
     }
 
     if(xhr.readyState == 4) {
-      if(xhr.statusCode == 200) {
+      if(xhr.status == 200) {
         var result = JSON.parse(xhr.responseText);
 
-        const launches = result.launches;
-        populateDropdown(launches);
+        callback(result.results);
       }
     }
   }
@@ -44,14 +44,23 @@ function getUpcomingLaunches(callback) {
 // - Adds one <option> per launch: text = launch name, value = launch id
 function populateDropdown(launches) {
   // TODO: Iterate and append <option> elements
+  for(let i = 0; i < launches.length; i++) {
+    let option = document.createElement("option");
+    option.textContent = launches[i].name;
+    option.value = launches[i].id;
+
+    document.getElementById("launchDropdown").append(option);
+  }
 }
 
 // Step 3: Add event listener to #launchDropdown
 // - On change, get the selected launch ID
 // - Call getLaunchDetails(launchId, callback)
-document.getElementById("launchDropdown").addEventListener("change", function () {
+document.getElementById("launchDropdown").addEventListener("change", () => {
   // TODO: Get selected launchId
+  const launchId = document.getElementById("launchDropdown").value;
   // TODO: Call getLaunchDetails
+  getLaunchDetails(launchId, displayLaunchInfo);
 });
 
 // Step 4: Create getLaunchDetails(launchId, callback)
@@ -59,6 +68,26 @@ document.getElementById("launchDropdown").addEventListener("change", function ()
 // - Parses the response and passes the launch object to the callback
 function getLaunchDetails(launchId, callback) {
   // TODO: Implement XHR GET request for a single launch
+  const xhr2 = new XMLHttpRequest();
+  xhr2.open("GET", BASE_URL + "/launches/" + launchId + "/");
+  xhr2.send();
+
+  xhr2.onreadystatechange = () => {
+    if(xhr2.readyState != 4) {
+      message.textContent = "Loading launch information..."
+    }
+
+    else { 
+      message.textContent = "";
+    }
+
+    if(xhr2.readyState == 4) {
+      if(xhr2.status == 200) {
+        let launch = JSON.parse(xhr2.responseText);
+        callback(launch);
+      }
+    }
+  }
 }
 
 // Step 5: Create displayLaunchInfo(launch)
@@ -67,7 +96,21 @@ function getLaunchDetails(launchId, callback) {
 // - If no image is available, displays a message instead
 function displayLaunchInfo(launch) {
   // TODO: Display mission name and description
+  let h2 = document.createElement("h2");
+  let p = document.createElement("p");
+
+  h2.textContent = launch.name;
+  p.textContent = launch.description;
+
   // TODO: Display the rocket image
+  let img = document.createElement("img");
+  img.src = launch.image.image_url;
+  img.alt = launch.image.name;
+
+  //Append the information to the document.
+  document.getElementById("missionDetails").append(h2);
+  document.getElementById("missionDetails").append(p);
+  document.getElementById("missionDetails").append(img);
 }
 
 // Final step: kick off the flow
