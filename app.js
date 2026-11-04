@@ -100,17 +100,17 @@ function displayLaunchInfo(launch) {
   let p = document.createElement("p");
 
   h2.textContent = launch.name;
-  p.textContent = launch.description;
+  p.textContent = launch.mission.description ?? "No mission description available.";
 
   // TODO: Display the rocket image
   let img = document.createElement("img");
-  img.src = launch.image.image_url;
-  img.alt = launch.image.name;
+  img.src = launch.image.image_url ?? "No image available.";
+  img.alt = launch.image.name ?? "";
 
   //Append the information to the document.
   document.getElementById("missionDetails").append(h2);
   document.getElementById("missionDetails").append(p);
-  document.getElementById("missionDetails").append(img);
+  document.getElementById("rocket").append(img);
 }
 
 // Final step: kick off the flow
