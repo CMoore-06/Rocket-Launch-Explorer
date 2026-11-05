@@ -16,14 +16,16 @@ const message = document.getElementById("status");
 // - Calls the callback function and passes the results array
 function getUpcomingLaunches(callback) {
   // TODO: Implement XHR GET request
+  message.textContent = "Loading launches..."
   axios.get(BASE_URL + "/launches/upcoming/")
     .then((response) => {
       message.textContent = "";
       callback(response.data.results);
     })
-    .catch(
-      //error message.
-    )
+    .catch((error) => {
+      message.textContent = "Could not load upcoming launches.";
+      console.log(error);
+    })
 }
 
 // Step 2: Create populateDropdown(launches)
@@ -55,13 +57,16 @@ document.getElementById("launchDropdown").addEventListener("change", () => {
 // - Parses the response and passes the launch object to the callback
 function getLaunchDetails(launchId, callback) {
   // TODO: Implement XHR GET request for a single launch
+  message.textContent = "Loading launch information...";
   axios.get(BASE_URL + "/launches/upcoming/" + launchId)
     .then((response) => {
+      message.textContent = "";
       callback(response.data);
     })
-    .catch(
-      //error message.
-    )
+    .catch(error => {
+      message.textContent = "Could not load launch information.";
+      console.log(error);
+    })
 }
 
 // Step 5: Create displayLaunchInfo(launch)
