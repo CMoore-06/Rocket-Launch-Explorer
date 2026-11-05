@@ -14,4 +14,4 @@ I mostly used AI to help me fix errors I couldn't fully figure out (especially t
 I just wanted to be upfront and honest about where AI was unsed in this project.
 
 ## Github Link ##
-(Repository Link)[https://github.com/CMoore-06/Rocket-Launch-Explorer]
+[Repository Link](https://github.com/CMoore-06/Rocket-Launch-Explorer)
