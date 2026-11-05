@@ -16,27 +16,14 @@ const message = document.getElementById("status");
 // - Calls the callback function and passes the results array
 function getUpcomingLaunches(callback) {
   // TODO: Implement XHR GET request
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", BASE_URL + "/launches/upcoming/");
-  xhr.send();
-
-  xhr.onreadystatechange = () => {
-    if(xhr.readyState != 4) {
-      //loading message here.
-    }
-
-    else {
-      //clear the loading message.
-    }
-
-    if(xhr.readyState == 4) {
-      if(xhr.status == 200) {
-        var result = JSON.parse(xhr.responseText);
-
-        callback(result.results);
-      }
-    }
-  }
+  axios.get(BASE_URL + "/launches/upcoming/")
+    .then((response) => {
+      message.textContent = "";
+      callback(response.data.results);
+    })
+    .catch(
+      //error message.
+    )
 }
 
 // Step 2: Create populateDropdown(launches)
@@ -68,26 +55,13 @@ document.getElementById("launchDropdown").addEventListener("change", () => {
 // - Parses the response and passes the launch object to the callback
 function getLaunchDetails(launchId, callback) {
   // TODO: Implement XHR GET request for a single launch
-  const xhr2 = new XMLHttpRequest();
-  xhr2.open("GET", BASE_URL + "/launches/" + launchId + "/");
-  xhr2.send();
-
-  xhr2.onreadystatechange = () => {
-    if(xhr2.readyState != 4) {
-      message.textContent = "Loading launch information..."
-    }
-
-    else { 
-      message.textContent = "";
-    }
-
-    if(xhr2.readyState == 4) {
-      if(xhr2.status == 200) {
-        let launch = JSON.parse(xhr2.responseText);
-        callback(launch);
-      }
-    }
-  }
+  axios.get(BASE_URL + "/launches/upcoming/" + launchId)
+    .then((response) => {
+      callback(response.data);
+    })
+    .catch(
+      //error message.
+    )
 }
 
 // Step 5: Create displayLaunchInfo(launch)
