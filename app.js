@@ -24,6 +24,7 @@ function getUpcomingLaunches(callback) {
     })
     .catch((error) => {
       message.textContent = "Could not load upcoming launches.";
+      message.classList.add("bg-danger");
       console.log(error);
     })
 }
@@ -40,6 +41,8 @@ function populateDropdown(launches) {
 
     document.getElementById("launchDropdown").append(option);
   }
+
+  //Style the dropdown when the options are added.
 }
 
 // Step 3: Add event listener to #launchDropdown
@@ -65,6 +68,7 @@ function getLaunchDetails(launchId, callback) {
     })
     .catch(error => {
       message.textContent = "Could not load launch information.";
+      message.classList.add("bg-danger");
       console.log(error);
     })
 }
@@ -74,6 +78,8 @@ function getLaunchDetails(launchId, callback) {
 // - Creates an image of the rocket (launch.rocket.configuration.image.image_url) and appends it to #rocket
 // - If no image is available, displays a message instead
 function displayLaunchInfo(launch) {
+  document.getElementById("missionDetails").replaceChildren();
+  document.getElementById("rocket").replaceChildren();
   // TODO: Display mission name and description
   let h2 = document.createElement("h2");
   let p = document.createElement("p");
